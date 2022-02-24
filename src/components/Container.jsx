@@ -20,7 +20,6 @@ import LockIcon from '@material-ui/icons/Lock';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SettingsIcon from '@material-ui/icons/Settings';
-import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import { withStyles } from "@material-ui/core/styles";
 
 import { compose } from 'redux'
@@ -28,8 +27,11 @@ import { connect } from "react-redux";
 
 import { logout } from "../actions/User";
 import { resetDataPapers } from "../actions/Paper";
+import { resetDataBills } from "../actions/Bill"
 
 import PaperIndex from './paper/Index';
+import PaperShow from './paper/Show';
+import PaperEdit from './paper/Edit';
 import SginIn from './SignIn';
 import SignUp from './SignUp';
 import UserEdit from './user/Edit';
@@ -52,6 +54,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    backgroundColor: '#5371ad'
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -62,7 +65,7 @@ const styles = theme => ({
     }),
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(1),
   },
   title: {
     flexGrow: 1,
@@ -87,7 +90,7 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(2),
+    padding: theme.spacing(0.8),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -114,7 +117,6 @@ const unauthedMenus = [
 
 const authMenus = [
   {text: 'Home', path: '/'},
-  {text: 'Trash', path: '/trash'},
   {text: 'Setting', path: '/setting'},
   {text: 'Logout', path: '/loguot'},
 ];
@@ -134,15 +136,20 @@ class Container extends React.Component {
 
   handleDrawerOpen = () => {
     this.setState({open: true});
-  };
+  }
 
   handleDrawerClose = () => {
     this.setState({open: false});
-  };
+  }
+
+  handleClickHome = () => {
+    window.location.href = '/'
+  }
 
   onLogout = e => {
     e.preventDefault();
     this.props.dispatch(resetDataPapers());
+    this.props.dispatch(resetDataBills());
     this.props.dispatch(logout());
     window.location.href = '/login'
   }
@@ -171,8 +178,8 @@ class Container extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h5" noWrap className={classes.title}>
-              Skill Manager
+            <Typography variant="h5" noWrap className={classes.title} onClick={this.handleClickHome}>
+              Spbill
             </Typography>
             {this.props.user.name.length > 0 &&
               <Typography>{this.props.user.name} さん</Typography>
@@ -212,7 +219,6 @@ class Container extends React.Component {
                   <ListItemIcon>
                     {hash.path == '/' && <HomeIcon /> }
                     {hash.path == '/setting' && <SettingsIcon /> }
-                    {hash.path == '/trash' && <DeleteSweepIcon /> }
                     {hash.path == '/login' && <LockOpenIcon /> }
                     {hash.path == '/signup' && <PersonAddIcon /> }
                   </ListItemIcon>
@@ -234,8 +240,9 @@ class Container extends React.Component {
             <Route path='/signup'><SignUp /></Route>
             <Auth>
               <Switch>
-                <Route exact path='/'><PaperIndex {...this.props} is_deleted={false} /></Route>
-                <Route path='/trash'><PaperIndex {...this.props} is_deleted={true} /></Route>
+                <Route exact path='/'><PaperIndex {...this.props} /></Route>
+                <Route exact path='/rooms/:id' ><PaperShow {...this.props} /></Route>
+                <Route exact path='/rooms/:id/edit' ><PaperEdit {...this.props} /></Route>
                 <Route path='/setting'><UserEdit /></Route>
               </Switch>
             </Auth>

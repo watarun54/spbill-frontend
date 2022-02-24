@@ -13,6 +13,10 @@ const receiveData = (error, response) => ({
   type: 'RECEIVE_DATA',
   payload: { error, response },
 });
+const receivePaper = (error, response) => ({
+  type: 'RECEIVE_PAPER',
+  payload: { error, response },
+});
 // リクエスト完了
 const finishRequest = paper => ({
   type: 'FINISH_REQUEST',
@@ -34,6 +38,64 @@ export const resetDataPapers = () => {
   }
 }
 
+export const setPaper = (paper) => {
+  return async (dispatch, getState) => {
+    dispatch(receivePaper(null, paper));
+  }
+} 
+
+export const getPaper = (id) => {
+  return async (dispatch, getState) => {
+    const paper = getState().paper;
+    const user = getState().user;
+    let token = user.token;
+
+    dispatch(startRequest(paper));
+
+    axios.get(`${apiURL}/api/rooms/${id}`, {
+      headers: {Authorization: `Bearer ${token}`}
+    }).then(res => {
+      console.log(res.data);
+      if (res.data) {
+        dispatch(receivePaper(null, res.data));
+      } else {
+        dispatch(receiveTokenExpired(user));
+      }
+    }).catch(err =>
+      dispatch(receiveData(err))
+    )
+
+    dispatch(finishRequest(paper));
+  };
+};
+
+export function addUser(userId) {
+  return (dispatch, getState) => {
+    const user = getState().user;
+    const paper = getState().paper;
+    let token = user.token;
+
+    dispatch(startRequest(paper));
+
+    axios.get(`${apiURL}/api/users/${userId}`, {
+      headers: {Authorization: `Bearer ${token}`}
+    }).then(res => {
+      if (!paper.paper.users.some(u => u.id === res.data.data.id)) {
+        paper.paper.users.push(res.data.data)
+      }
+      if (res.data) {
+        dispatch(receivePaper(null, paper.paper));
+      } else {
+        dispatch(receiveTokenExpired(user));
+      }
+    }).catch(err =>
+      dispatch(receiveData(err))
+    )
+
+    dispatch(finishRequest(paper));
+  };
+}
+
 export const getPapers = () => {
   return async (dispatch, getState) => {
     const paper = getState().paper;
@@ -42,14 +104,13 @@ export const getPapers = () => {
 
     dispatch(startRequest(paper));
 
-    axios.get(`${apiURL}/api/papers`, {
+    axios.get(`${apiURL}/api/rooms`, {
       headers: {Authorization: `Bearer ${token}`}
     }).then(res => {
       console.log(res.data);
-      if (res.data.data) {
-        const paperList = res.data.data.filter(paper => !paper.is_deleted).reverse();
+      if (res.data) {
+        const paperList = res.data.reverse();
         dispatch(receiveData(null, paperList));
-        console.log("fetch and set");
       } else {
         dispatch(receiveTokenExpired(user));
       }
@@ -76,7 +137,6 @@ export const getDeletedPapers = () => {
       if (res.data.data) {
         const paperList = res.data.data.filter(paper => paper.is_deleted).reverse();
         dispatch(receiveData(null, paperList));
-        console.log("fetch and set");
       } else {
         dispatch(receiveTokenExpired(user));
       }
@@ -96,20 +156,19 @@ export const createPaper = (data) => {
 
     dispatch(startRequest(paper));
 
-    axios.post(`${apiURL}/api/papers`,
+    axios.post(`${apiURL}/api/rooms`,
       data, { headers: { Authorization: `Bearer ${token}` }
       }).then((res) => {
         console.log(res.data);
-        if (res.data.data) {
-          paper.paperList.unshift(res.data.data);
+        if (res.data) {
+          paper.paperList.unshift(res.data);
           dispatch(receiveData(null, paper.paperList));
-          console.log("create and set");
+          dispatch(receivePaper(null, res.data));
         } else {
           dispatch(receiveTokenExpired(user));
         }
       }).catch(err => {
         dispatch(receiveData(err))
-        console.log(err);
       })
 
     dispatch(finishRequest(paper));
@@ -124,53 +183,22 @@ export const editPaper = (data) => {
 
     dispatch(startRequest(paper));
 
-    axios.put(`${apiURL}/api/papers/${data.id}`,
+    axios.put(`${apiURL}/api/rooms/${data.id}`,
       data, { headers: { Authorization: `Bearer ${token}` }
       }).then((res) => {
         console.log(res.data);
-        if (res.data.data) {
+        if (res.data) {
           const newPaperList = paper.paperList.map(v => {
-            if (v.id === data.id) { return res.data.data; }
+            if (v.id === data.id) { return res.data; }
             return v;
           });
           dispatch(receiveData(null, newPaperList));
-          console.log("update and set");
+          dispatch(receivePaper(null, res.data));
         } else {
           dispatch(receiveTokenExpired(user));
         }
       }).catch(err => {
         dispatch(receiveData(err))
-        console.log(err);
-      })
-
-    dispatch(finishRequest(paper));
-  }
-}
-
-export const recoverPaper = (id) => {
-  return async (dispatch, getState) => {
-    const paper = getState().paper;
-    const user = getState().user;
-    const token = user.token;
-    const data = {id: id, is_deleted: false};
-
-    dispatch(startRequest(paper));
-
-    axios.put(`${apiURL}/api/papers/${data.id}`,
-      data, { headers: { Authorization: `Bearer ${token}` }
-      }).then((res) => {
-        console.log(res.data);
-        if (res.data.data) {
-          const paperIdx = paper.paperList.findIndex(v => v.id === id)
-          paper.paperList.splice(paperIdx, 1)
-          dispatch(receiveData(null, paper.paperList));
-          console.log("recover and set");
-        } else {
-          dispatch(receiveTokenExpired(user));
-        }
-      }).catch(err => {
-        dispatch(receiveData(err))
-        console.log(err);
       })
 
     dispatch(finishRequest(paper));
@@ -183,44 +211,15 @@ export const deletePaper = (id) => {
     const user = getState().user;
     let token = user.token;
 
-    axios.delete(`${apiURL}/api/papers/${id}`, {
+    axios.delete(`${apiURL}/api/rooms/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((res) => {
         console.log(res.data);
-        if (res.data.data) {
+        if (res.data) {
           const paperIdx = paper.paperList.findIndex(v => v.id === id)
           paper.paperList.splice(paperIdx, 1)
           dispatch(receiveData(null, paper.paperList));
-          console.log("delete and set");
-        } else {
-          dispatch(receiveTokenExpired(user));
-        }
-      })
-      .catch((err) => {
-        dispatch(receiveData(err));
-      })
-
-    dispatch(finishRequest(paper));
-  }
-}
-
-export const deletePaperCompletely = (id) => {
-  return async (dispatch, getState) => {
-    const paper = getState().paper;
-    const user = getState().user;
-    let token = user.token;
-
-    axios.delete(`${apiURL}/api/papers/${id}/complete`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.data) {
-          const paperIdx = paper.paperList.findIndex(v => v.id === id)
-          paper.paperList.splice(paperIdx, 1)
-          dispatch(receiveData(null, paper.paperList));
-          console.log("delete and set");
         } else {
           dispatch(receiveTokenExpired(user));
         }

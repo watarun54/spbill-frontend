@@ -66,7 +66,7 @@ class SignIn extends React.Component {
     this.state = { "message": null };
   }
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     if (this.props.user.token) {
       this.props.history.push("/");
     }

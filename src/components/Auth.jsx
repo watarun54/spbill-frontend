@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 
 import { logout } from "../actions/User"
 import { resetDataPapers } from "../actions/Paper"
+import { resetDataBills } from "../actions/Bill"
 
 class Auth extends React.Component {
   constructor(props) {
@@ -14,16 +15,17 @@ class Auth extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.paper.tokenExpired === 1) {
       this.props.dispatch(resetDataPapers());
+      this.props.dispatch(resetDataBills());
       this.props.dispatch(logout());
       this.props.history.push("/login");
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.checkAuth();
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     this.checkAuth();
   }
 

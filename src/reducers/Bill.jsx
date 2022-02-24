@@ -1,12 +1,12 @@
 const initialState = {
-  paper: null,
-  paperList: [],
+  billList: [],
+  userPayments: [],
   tokenExpired: 0,
   error: false,
   isFetching: false,
 }
 
-export default function paperReducer(state = initialState, action) {
+export default function billReducer(state = initialState, action) {
   switch (action.type) {
 
     case 'START_REQUEST':
@@ -20,33 +20,34 @@ export default function paperReducer(state = initialState, action) {
         ? { ...state, error: true, isFetching: false }
         : {
             ...state,
-            paperList: action.payload.response,
+            billList: action.payload.response,
             isFetching: false,
           };
 
-    case 'RECEIVE_PAPER':
+    case 'RECEIVE_USER_PAYMENTS':
       return action.payload.error
-        ? { ...state, error: true }
+        ? { ...state, error: true, isFetching: false }
         : {
             ...state,
-            paper: action.payload.response,
+            userPayments: action.payload.response,
+            isFetching: false,
           };
 
     case 'FINISH_REQUEST':
       return state;
 
-    case 'RESET_DATA_PAPERS':
+    case 'RESET_DATA':
       return {
-        paper: null,
-        paperList: [],
+        bill: null,
+        billList: [],
         tokenExpired: 0,
         error: false
       };
 
     case 'RECEIVE_TOKEN_EXPIRED':
       return {
-        paper: null,
-        paperList: [],
+        bill: null,
+        billList: [],
         tokenExpired: 1
       };
 
