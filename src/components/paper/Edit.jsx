@@ -96,20 +96,19 @@ class PaperEdit extends React.Component {
   }
 
   userList = () => {
-    const { classes, paper, user } = this.props
+    const { classes, paper } = this.props
     if (!paper.paper) return
 
-    return paper.paper.users.filter(u => u.id !== user.uid)
-      .map((user, i) => {
-        return (
-          <div key={i} className={classes.flex}>
-            <IconButton className={classes.btn} color="secondary" edge="end" aria-label="edit" onClick={() => this.handleClickRemoveUser(user.id)}>
-              <MinusIcon />
-            </IconButton>
-            <p className={classes.listElement}>{user.name}</p>
-          </div>
-        )
-      })
+    return paper.paper.users.map((user, i) => {
+              return (
+                <div key={i} className={classes.flex}>
+                  <IconButton className={classes.btn} color="secondary" edge="end" aria-label="edit" onClick={() => this.handleClickRemoveUser(user.id)}>
+                    <MinusIcon />
+                  </IconButton>
+                  <p className={classes.listElement}>{user.name}</p>
+                </div>
+              )
+            })
   }
 
   handleSave = e => {
