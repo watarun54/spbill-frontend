@@ -50,8 +50,8 @@ class AddBillDialog extends React.Component {
     super(props);
     this.state = {
       open: false,
-      inputName: 'タクシー代',
-      inputAmount: 1000,
+      inputName: '',
+      inputAmount: 0,
       inputPayerId: 0,
       inputPayeeIds: []
     }
@@ -166,19 +166,18 @@ class AddBillDialog extends React.Component {
                 id="name"
                 label="品目"
                 name="name"
-                defaultValue={this.state.inputName}
+                placeholder='タクシー代'
                 onChange={this.handleChangeName}
                 fullWidth
               />
               <TextField
                 type="number"
-                autoFocus
                 required
                 margin="dense"
                 id="name"
                 label="金額"
                 name="amount"
-                defaultValue={this.state.inputAmount}
+                placeholder='2000'
                 onChange={this.handleChangeAmount}
                 fullWidth
               />
