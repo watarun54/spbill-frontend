@@ -124,7 +124,7 @@ class AddBillDialog extends React.Component {
     const { paper } = this.props;
     if (!paper.paper) return
 
-    return paper.paper.users.map((payer, i) => {
+    return paper.paper.members.map((payer, i) => {
       return <MenuItem key={i} value={payer.id}>{payer.name}</MenuItem>
     })
   }
@@ -133,7 +133,7 @@ class AddBillDialog extends React.Component {
     const { classes, paper } = this.props;
     if (!paper.paper) return
 
-    return paper.paper.users
+    return paper.paper.members
       .filter(u => u.id !== this.state.inputPayerId)
       .map((payee, i) => {
         const checked = this.state.inputPayeeIds.includes(payee.id)

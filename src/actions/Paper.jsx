@@ -96,6 +96,57 @@ export function addUser(userId) {
   };
 }
 
+export function addMember(name) {
+  return (dispatch, getState) => {
+    const user = getState().user;
+    const paper = getState().paper;
+    let token = user.token;
+
+    dispatch(startRequest(paper));
+
+    axios.post(`${apiURL}/api/rooms/${paper.paper.id}/members`,
+      { name }, { headers: { Authorization: `Bearer ${token}` }
+      }).then((res) => {
+        if (res.data) {
+          dispatch(receivePaper(null, res.data));
+        } else {
+          dispatch(receiveTokenExpired(user));
+        }
+      }).catch(err => {
+        // TODO: エラーハンドリング(data.messageが存在する場合としない場合)
+        alert(err.response.data.message)
+        dispatch(receiveData(err))
+      })
+
+    dispatch(finishRequest(paper));
+  };
+}
+
+export function deleteMember(id) {
+  return (dispatch, getState) => {
+    const user = getState().user;
+    const paper = getState().paper;
+    let token = user.token;
+
+    dispatch(startRequest(paper));
+
+    axios.delete(`${apiURL}/api/rooms/${paper.paper.id}/members/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then((res) => {
+        if (res.data) {
+          dispatch(receivePaper(null, res.data));
+        } else {
+          dispatch(receiveTokenExpired(user));
+        }
+      }).catch(err => {
+        alert(err.response.data.message)
+        dispatch(receiveData(err))
+      })
+
+    dispatch(finishRequest(paper));
+  };
+}
+
 export const getPapers = () => {
   return async (dispatch, getState) => {
     const paper = getState().paper;

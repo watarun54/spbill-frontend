@@ -90,16 +90,14 @@ class PaperEdit extends React.Component {
   }
 
   handleClickRemoveUser = (userId) => {
-    const paper = this.props.paper.paper
-    paper.users = paper.users.filter(u => u.id !== userId)
-    this.props.dispatch(PaperAction.setPaper(paper))
+    this.props.dispatch(PaperAction.deleteMember(userId))
   }
 
   userList = () => {
     const { classes, paper } = this.props
     if (!paper.paper) return
 
-    return paper.paper.users.map((user, i) => {
+    return paper.paper.members.map((user, i) => {
               return (
                 <div key={i} className={classes.flex}>
                   <IconButton className={classes.btn} color="secondary" edge="end" aria-label="edit" onClick={() => this.handleClickRemoveUser(user.id)}>
@@ -150,6 +148,9 @@ class PaperEdit extends React.Component {
               fullWidth
               className={classes.field}
             />
+            <Button type="submit" variant="outlined" color="primary" fullWidth>
+              保存
+            </Button>
             <FormGroup className={classes.field}>
               <div className={classes.flex}>
                 <InputLabel
@@ -163,9 +164,6 @@ class PaperEdit extends React.Component {
               </div>
               {this.userList()}
             </FormGroup>
-            <Button type="submit" variant="outlined" color="primary" fullWidth>
-              保存
-            </Button>
           </form>
         </SiimpleBox>
       </Grid>

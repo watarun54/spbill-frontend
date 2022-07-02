@@ -28,18 +28,15 @@ class AddUserDialog extends React.Component {
     super(props);
     this.state = {
       open: false,
-      inputUserId: 0
+      inputMemberName: ''
     }
   }
 
   handleAddUser = () => {
-    const data = {
-      id: this.state.inputUserId,
-    }
-    this.props.dispatch(PaperAction.addUser(data.id))
+    this.props.dispatch(PaperAction.addMember(this.state.inputMemberName))
     this.setState({
       open: false,
-      inputUserId: 0
+      inputMemberName: ''
     });
   }
 
@@ -51,9 +48,9 @@ class AddUserDialog extends React.Component {
     this.setState({ open: false });
   }
 
-  handleChangeEmail = (e) => {
+  handleChangeMemberName = (e) => {
     this.setState({
-      inputUserId: e.target.value
+      inputMemberName: e.target.value
     })
   }
 
@@ -71,11 +68,12 @@ class AddUserDialog extends React.Component {
               autoFocus
               required
               margin="dense"
-              id="uid"
-              label="ユーザーID"
-              name="uid"
-              defaultValue={this.state.inputUserId}
-              onChange={this.handleChangeEmail}
+              id="member_name"
+              label="名前"
+              name="member_name"
+              placeholder='太郎'
+              defaultValue={this.state.inputMemberName}
+              onChange={this.handleChangeMemberName}
               fullWidth
             />
           </DialogContent>

@@ -168,7 +168,7 @@ export const getUserPaymentsByRoomId = (roomId) => {
         const list = res.data.reverse();
         dispatch(receiveUserPayments(null, list));
       } else {
-        dispatch(receiveTokenExpired(user));
+        dispatch(receiveUserPayments(null, []));
       }
     }).catch(err =>
       dispatch(receiveUserPayments(err))

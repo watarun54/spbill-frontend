@@ -127,7 +127,7 @@ class PaperShow extends React.Component {
 
   getUserPaymentTexts = () => {
     return this.props.bill.userPayments.map(up => {
-      return `${up.amount}円｜${up.from_user.name} → ${up.to_user.name}`
+      return `${up.from_member.name} は ${up.to_member.name} に ${up.amount}円 渡す`
     })
   }
 
