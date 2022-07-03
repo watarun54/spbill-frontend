@@ -134,7 +134,7 @@ class PaperShow extends React.Component {
           <div className={classes.titleContainer}>
             {paper &&
               <Link href={`/rooms/${paper.id}/edit`} color="inherit">
-                <ArrowRight className={classes.rightIcon} />「{paper.name}」を編集する
+                <ArrowRight className={classes.rightIcon} />「{paper.name}」を編集 / メンバーを追加
               </Link>
             }
             <AddBillDialog />

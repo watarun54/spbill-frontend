@@ -31,6 +31,7 @@ import { resetDataBills } from "../actions/Bill"
 
 import PaperIndex from './paper/Index';
 import PaperShow from './paper/Show';
+import PaperAdd from './paper/Add';
 import PaperEdit from './paper/Edit';
 import SginIn from './SignIn';
 import SignUp from './SignUp';
@@ -179,7 +180,7 @@ class Container extends React.Component {
               <MenuIcon />
             </IconButton> */}
             <Typography variant="h5" noWrap className={classes.title} onClick={this.handleClickHome}>
-              Spbill
+              SpBill.
             </Typography>
             {this.props.user.name.length > 0 &&
               <Typography>{this.props.user.name} さん</Typography>
@@ -247,7 +248,7 @@ class Container extends React.Component {
               </Switch>
             </Auth> */}
 
-            <Route exact path='/'><PaperIndex {...this.props} /></Route>
+            <Route exact path='/'><PaperAdd {...this.props} /></Route>
             <Route exact path='/rooms/:id' ><PaperShow {...this.props} /></Route>
             <Route exact path='/rooms/:id/edit' ><PaperEdit {...this.props} /></Route>
           </Switch>

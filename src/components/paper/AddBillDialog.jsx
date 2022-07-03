@@ -10,7 +10,6 @@ import {
   withStyles,
   TextField,
   Button,
-  IconButton,
   Dialog,
   DialogActions,
   DialogContent,
@@ -37,11 +36,9 @@ const styles = theme => ({
     height: 30
   },
   addBtn: {
-    color: '#fafafa',
-    padding: 0,
-    position: 'relative',
-    top: 4,
-    right: 10
+    color: '#ad002d',
+    paddingLeft: 12,
+    paddingRight: 12,
   },
 })
 
@@ -156,9 +153,9 @@ class AddBillDialog extends React.Component {
 
     return (
       <div className={classes.container}>
-        <IconButton className={classes.addBtn} edge="end" aria-label="edit" onClick={() => this.handleClickOpen()}>
-          <AddIcon />
-        </IconButton>
+        <Button className={classes.addBtn} variant="contained" startIcon={<AddIcon />} onClick={() => this.handleClickOpen()}>
+          立替を追加
+        </Button>
         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
           <form className="siimple-form" onSubmit={this.handleSave}>
             <DialogContent>
@@ -217,7 +214,7 @@ class AddBillDialog extends React.Component {
                 キャンセル
             </Button>
               <Button type="submit" color="primary">
-                保存
+                追加
             </Button>
             </DialogActions>
           </form>

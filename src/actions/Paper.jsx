@@ -215,8 +215,7 @@ export const createPaper = (data) => {
           paper.paperList.unshift(res.data);
           dispatch(receiveData(null, paper.paperList));
           dispatch(receivePaper(null, res.data));
-        } else {
-          dispatch(receiveTokenExpired(user));
+          window.location.href = `/rooms/${res.data.id}`
         }
       }).catch(err => {
         dispatch(receiveData(err))
