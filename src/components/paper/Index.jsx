@@ -60,7 +60,7 @@ class PaperIndex extends React.Component {
         }
       },
       {
-        field: 'users',
+        field: 'members',
         headerName: 'メンバー',
         sortable: false,
         width: 300,
@@ -94,7 +94,7 @@ class PaperIndex extends React.Component {
       return {
         id: paper.id,
         name: paper.name,
-        users: paper.users.map(u => u.name).join(),
+        members: paper.members.map(u => u.name).join(),
         createdAt: new Date(Date.parse(paper.created_at)).toLocaleString()
       }
     })

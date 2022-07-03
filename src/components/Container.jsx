@@ -169,7 +169,7 @@ class Container extends React.Component {
           })}
         >
           <Toolbar>
-            <IconButton
+            {/* <IconButton
               color="inherit"
               aria-label="open drawer"
               onClick={this.handleDrawerOpen}
@@ -177,7 +177,7 @@ class Container extends React.Component {
               className={clsx(classes.menuButton, this.state.open && classes.hide)}
             >
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
             <Typography variant="h5" noWrap className={classes.title} onClick={this.handleClickHome}>
               Spbill
             </Typography>
@@ -236,7 +236,7 @@ class Container extends React.Component {
         >
         <div className={classes.drawerHeader} />
           <Switch>
-            <Route path='/login'><SginIn /></Route>
+            {/* <Route path='/login'><SginIn /></Route>
             <Route path='/signup'><SignUp /></Route>
             <Auth>
               <Switch>
@@ -245,7 +245,11 @@ class Container extends React.Component {
                 <Route exact path='/rooms/:id/edit' ><PaperEdit {...this.props} /></Route>
                 <Route path='/setting'><UserEdit /></Route>
               </Switch>
-            </Auth>
+            </Auth> */}
+
+            <Route exact path='/'><PaperIndex {...this.props} /></Route>
+            <Route exact path='/rooms/:id' ><PaperShow {...this.props} /></Route>
+            <Route exact path='/rooms/:id/edit' ><PaperEdit {...this.props} /></Route>
           </Switch>
         </div>
         </BrowserRouter>

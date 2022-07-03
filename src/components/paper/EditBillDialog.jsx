@@ -42,9 +42,9 @@ class EditBillDialog extends React.Component {
     this.state = {
       open: false,
       bill: bill,
-      inputName: '',
-      inputAmount: 0,
-      inputPayerId: 0,
+      inputName: null,
+      inputAmount: null,
+      inputPayerId: null,
       inputPayeeIds: []
     }
   }
@@ -60,6 +60,11 @@ class EditBillDialog extends React.Component {
 
   handleSave = e => {
     e.preventDefault();
+
+    if (this.state.inputPayeeIds.length === 0) {
+      return alert('支払ってもらった人を選択してください')
+    }
+
     const data = {
       id: this.state.bill.id,
       name: this.state.inputName,

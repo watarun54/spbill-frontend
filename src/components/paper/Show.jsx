@@ -59,44 +59,37 @@ class PaperShow extends React.Component {
       {
         field: 'name',
         headerName: '品目',
-        width: 150,
-        editable: true,
+        width: 200,
       },
       {
         field: 'amount',
         headerName: '金額(円)',
         width: 130,
-        editable: true,
       },
       {
         field: 'payer',
         headerName: '支払った人',
-        width: 200,
-        editable: true,
+        width: 140,
       },
       {
         field: 'payees',
         headerName: '支払ってもらった人',
-        sortable: false,
         width: 200,
       },
       {
         field: 'createdAt',
         headerName: '登録日時',
-        width: 150,
-        editable: true,
+        width: 130,
       },
       {
         field: 'updatedAt',
         headerName: '更新日時',
-        width: 150,
-        editable: true,
+        width: 130,
       },
       {
         field: 'btns',
         headerName: '操作',
         sortable: false,
-        editable: false,
         width: 100,
         disableClickEventBubbling: true,
         renderCell: (params) => {

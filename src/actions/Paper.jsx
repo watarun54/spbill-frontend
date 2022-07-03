@@ -266,14 +266,9 @@ export const deletePaper = (id) => {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((res) => {
-        console.log(res.data);
-        if (res.data) {
-          const paperIdx = paper.paperList.findIndex(v => v.id === id)
-          paper.paperList.splice(paperIdx, 1)
-          dispatch(receiveData(null, paper.paperList));
-        } else {
-          dispatch(receiveTokenExpired(user));
-        }
+        const paperIdx = paper.paperList.findIndex(v => v.id === id)
+        paper.paperList.splice(paperIdx, 1)
+        dispatch(receiveData(null, paper.paperList));
       })
       .catch((err) => {
         dispatch(receiveData(err));

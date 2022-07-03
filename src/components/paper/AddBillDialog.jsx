@@ -50,9 +50,9 @@ class AddBillDialog extends React.Component {
     super(props);
     this.state = {
       open: false,
-      inputName: '',
-      inputAmount: 0,
-      inputPayerId: 0,
+      inputName: null,
+      inputAmount: null,
+      inputPayerId: null,
       inputPayeeIds: []
     }
   }
@@ -61,19 +61,22 @@ class AddBillDialog extends React.Component {
     e.preventDefault();
     const { paper } = this.props;
 
+    if (this.state.inputPayeeIds.length === 0) {
+      return alert('支払ってもらった人を選択してください')
+    }
+
     const data = {
       name: this.state.inputName,
       amount: this.state.inputAmount,
-      room_id: paper.paper.id,
       payer_id: this.state.inputPayerId,
       payee_ids: this.state.inputPayeeIds
     }
     this.props.dispatch(BillAction.createBill(data))
     this.setState({
       open: false,
-      inputName: 'タクシー代',
-      inputAmount: 1000,
-      inputPayerId: 0,
+      inputName: null,
+      inputAmount: null,
+      inputPayerId: null,
       inputPayeeIds: []
     });
   }

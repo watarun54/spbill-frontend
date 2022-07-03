@@ -47,16 +47,12 @@ export const createBill = (data) => {
 
     dispatch(startRequest(bill));
 
-    axios.post(`${apiURL}/api/bills`,
+    axios.post(`${apiURL}/api/rooms/${paper.paper.id}/bills`,
       data, { headers: { Authorization: `Bearer ${token}` }
       }).then((res) => {
-        console.log(res.data);
         if (res.data) {
-          bill.billList.unshift(res.data);
-          dispatch(receiveData(null, bill.billList));
+          dispatch(getBillsByRoomId(paper.paper.id));
           dispatch(getUserPaymentsByRoomId(paper.paper.id))
-        } else {
-          dispatch(receiveTokenExpired(user));
         }
       }).catch(err => {
         dispatch(receiveData(err))
