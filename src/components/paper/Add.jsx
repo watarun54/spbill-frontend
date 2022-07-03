@@ -95,7 +95,7 @@ class PaperAdd extends React.Component {
     const { classes } = this.props
 
     return (
-      <Grid item s={12} md={10} className={classes.container}>
+      <Grid item s={12} md={7} className={classes.container}>
         <SiimpleBox className="siimple-box siimple--bg-dark" >
           <Typography variant="h1" noWrap className={classes.title}>
             部屋を作成して、割り勘をはじめる。

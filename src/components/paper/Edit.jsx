@@ -126,7 +126,7 @@ class PaperEdit extends React.Component {
     const paper = this.props.paper.paper
 
     return (
-      <Grid item s={12} md={10} className={classes.container}>
+      <Grid item s={12} md={7} className={classes.container}>
         <SiimpleBox className="siimple-box siimple--bg-dark" >
           <div className={classes.titleContainer}>
             {paper &&
