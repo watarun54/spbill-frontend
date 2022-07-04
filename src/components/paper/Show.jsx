@@ -21,6 +21,7 @@ import * as BillAction from '../../actions/Bill';
 import DeleteDialog from './DeleteDialog';
 import EditBillDialog from './EditBillDialog';
 import AddBillDialog from './AddBillDialog';
+import NotFound from '../NotFound';
 
 const styles = theme => ({
   whiteText: {
@@ -126,41 +127,47 @@ class PaperShow extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const paper = this.props.paper.paper
+    const { paper, error } = this.props.paper
 
-    return (
-      <Grid item s={12} md={10}>
-        <SiimpleBox className="siimple-box siimple--bg-dark" >
-          <div className={classes.titleContainer}>
-            {paper &&
-              <Link href={`/rooms/${paper.id}/edit`} color="inherit">
-                <ArrowRight className={classes.rightIcon} />「{paper.name}」を編集 / メンバーを追加
-              </Link>
-            }
-            <AddBillDialog />
-          </div>
-          <div className="siimple-rule"></div>
-          <ul>
-            {this.getUserPaymentTexts().map((text, i) => {
-              return (
-                <li key={i} className={classes.whiteText}>
-                  {text}
-                </li>
-              )
-            })}
-          </ul>
-          <div className={classes.dataGrid}>
-            <DataGrid
-              rows={this.rows()}
-              columns={this.columns()}
-              autoPageSize
-              autoHeight
-              rowHeight={30}
-            />
-          </div>
-        </SiimpleBox>
-      </Grid>
-    );
+    if (error) {
+      return (
+        <NotFound />
+      )
+    } else {
+      return (
+        <Grid item s={12} md={10}>
+          <SiimpleBox className="siimple-box siimple--bg-dark" >
+            <div className={classes.titleContainer}>
+              {paper &&
+                <Link href={`/rooms/${paper.id}/edit`} color="inherit">
+                  <ArrowRight className={classes.rightIcon} />「{paper.name}」を編集 / メンバーを追加
+                </Link>
+              }
+              <AddBillDialog />
+            </div>
+            <div className="siimple-rule"></div>
+            <ul>
+              {this.getUserPaymentTexts().map((text, i) => {
+                return (
+                  <li key={i} className={classes.whiteText}>
+                    {text}
+                  </li>
+                )
+              })}
+            </ul>
+            <div className={classes.dataGrid}>
+              <DataGrid
+                rows={this.rows()}
+                columns={this.columns()}
+                autoPageSize
+                autoHeight
+                rowHeight={30}
+              />
+            </div>
+          </SiimpleBox>
+        </Grid>
+      );
+    }
   }
 }
 

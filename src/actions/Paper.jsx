@@ -58,8 +58,6 @@ export const getPaper = (id) => {
       console.log(res.data);
       if (res.data) {
         dispatch(receivePaper(null, res.data));
-      } else {
-        dispatch(receiveTokenExpired(user));
       }
     }).catch(err =>
       dispatch(receiveData(err))

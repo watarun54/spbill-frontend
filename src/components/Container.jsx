@@ -35,6 +35,7 @@ import PaperAdd from './paper/Add';
 import PaperEdit from './paper/Edit';
 import SginIn from './SignIn';
 import SignUp from './SignUp';
+import NotFound from "./NotFound";
 import UserEdit from './user/Edit';
 import Auth from "./Auth.jsx";
 import ScrollToTop from "./ScrollToTop.jsx";
@@ -251,6 +252,7 @@ class Container extends React.Component {
             <Route exact path='/'><PaperAdd {...this.props} /></Route>
             <Route exact path='/rooms/:id' ><PaperShow {...this.props} /></Route>
             <Route exact path='/rooms/:id/edit' ><PaperEdit {...this.props} /></Route>
+            <Route><NotFound /></Route>
           </Switch>
         </div>
         </BrowserRouter>
