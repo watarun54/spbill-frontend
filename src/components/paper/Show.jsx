@@ -9,7 +9,8 @@ import {
 } from '@material-ui/icons';
 import {
   Grid,
-  Link
+  Link,
+  Typography
 } from '@material-ui/core';
 
 import { DataGrid } from '@material-ui/data-grid';
@@ -33,8 +34,15 @@ const styles = theme => ({
     borderRadius: 4
   },
   titleContainer: {
-    display: 'flex',
+    lineHeight: '40px',
     color: '#fafafa'
+  },
+  title: {
+    color: '#fafafa',
+    fontSize: 24,
+    marginTop: 6,
+    marginBottom: 6,
+    lineHeight: '40px'
   },
   rightIcon: {
     position: 'relative',
@@ -138,11 +146,12 @@ class PaperShow extends React.Component {
         <Grid item s={12} md={10}>
           <SiimpleBox className="siimple-box siimple--bg-dark" >
             <div className={classes.titleContainer}>
-              {paper &&
-                <Link href={`/rooms/${paper.id}/edit`} color="inherit">
-                  <ArrowRight className={classes.rightIcon} />「{paper.name}」を編集 / メンバーを追加
-                </Link>
-              }
+              <Typography variant="h1" className={classes.title}>
+                {paper?.name}
+              </Typography>
+              <Link href={`/rooms/${paper?.id}/edit`} color="inherit">
+                <ArrowRight className={classes.rightIcon} />メンバーを追加
+              </Link>
               <AddBillDialog />
             </div>
             <div className="siimple-rule"></div>

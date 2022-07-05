@@ -31,7 +31,8 @@ const styles = theme => ({
     color: '#fafafa',
     fontSize: 24,
     marginTop: 6,
-    marginBottom: 6
+    marginBottom: 6,
+    lineHeight: '40px'
   },
   inputLabel: {
     fontSize: 15,
@@ -97,8 +98,8 @@ class PaperAdd extends React.Component {
     return (
       <Grid item s={12} md={7} className={classes.container}>
         <SiimpleBox className="siimple-box siimple--bg-dark" >
-          <Typography variant="h1" noWrap className={classes.title}>
-            部屋を作成して、割り勘をはじめる。
+          <Typography variant="h1" className={classes.title}>
+            部屋を作成して、<br />割り勘をはじめる。
           </Typography>
           <div className="siimple-rule"></div>
           <form className={classes.form} onSubmit={this.handleSave}>

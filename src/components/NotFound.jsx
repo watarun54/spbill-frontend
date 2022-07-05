@@ -18,7 +18,7 @@ const styles = theme => ({
     alignItems: 'center',
   },
   title: {
-    fontSize: 30,
+    fontSize: 24,
     marginBottom: 15
   }
 });

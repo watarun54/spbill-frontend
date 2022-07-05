@@ -129,11 +129,9 @@ class PaperEdit extends React.Component {
       <Grid item s={12} md={7} className={classes.container}>
         <SiimpleBox className="siimple-box siimple--bg-dark" >
           <div className={classes.titleContainer}>
-            {paper &&
-              <Link href={`/rooms/${paper.id}`} color="inherit">
-                <ArrowRight className={classes.rightIcon} />「{paper.name}」の立替一覧に戻る
-              </Link>
-            }
+            <Link href={`/rooms/${paper?.id}`} color="inherit">
+              <ArrowRight className={classes.rightIcon} />立替一覧に戻る
+            </Link>
           </div>
           <div className="siimple-rule"></div>
           <form className={classes.form} onSubmit={this.handleSave}>
