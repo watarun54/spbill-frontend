@@ -9,7 +9,8 @@ import {
 } from '@material-ui/icons';
 import {
   Grid,
-  Link
+  Link,
+  Typography
 } from '@material-ui/core';
 
 import { DataGrid } from '@material-ui/data-grid';
@@ -21,6 +22,7 @@ import * as BillAction from '../../actions/Bill';
 import DeleteDialog from './DeleteDialog';
 import EditBillDialog from './EditBillDialog';
 import AddBillDialog from './AddBillDialog';
+import NotFound from '../NotFound';
 
 const styles = theme => ({
   whiteText: {
@@ -32,8 +34,15 @@ const styles = theme => ({
     borderRadius: 4
   },
   titleContainer: {
-    display: 'flex',
+    lineHeight: '40px',
     color: '#fafafa'
+  },
+  title: {
+    color: '#fafafa',
+    fontSize: 24,
+    marginTop: 6,
+    marginBottom: 6,
+    lineHeight: '40px'
   },
   rightIcon: {
     position: 'relative',
@@ -59,44 +68,37 @@ class PaperShow extends React.Component {
       {
         field: 'name',
         headerName: '品目',
-        width: 150,
-        editable: true,
+        width: 200,
       },
       {
         field: 'amount',
         headerName: '金額(円)',
         width: 130,
-        editable: true,
       },
       {
         field: 'payer',
         headerName: '支払った人',
-        width: 200,
-        editable: true,
+        width: 140,
       },
       {
         field: 'payees',
         headerName: '支払ってもらった人',
-        sortable: false,
         width: 200,
       },
       {
         field: 'createdAt',
         headerName: '登録日時',
-        width: 150,
-        editable: true,
+        width: 130,
       },
       {
         field: 'updatedAt',
         headerName: '更新日時',
-        width: 150,
-        editable: true,
+        width: 130,
       },
       {
         field: 'btns',
         headerName: '操作',
         sortable: false,
-        editable: false,
         width: 100,
         disableClickEventBubbling: true,
         renderCell: (params) => {
@@ -127,47 +129,54 @@ class PaperShow extends React.Component {
 
   getUserPaymentTexts = () => {
     return this.props.bill.userPayments.map(up => {
-      return `${up.amount}円｜${up.from_user.name} → ${up.to_user.name}`
+      return `${up.from_member.name} は ${up.to_member.name} に ${up.amount}円 渡す`
     })
   }
 
   render() {
     const { classes } = this.props;
-    const paper = this.props.paper.paper
+    const { paper, error } = this.props.paper
 
-    return (
-      <Grid item s={12} md={10}>
-        <SiimpleBox className="siimple-box siimple--bg-dark" >
-          <div className={classes.titleContainer}>
-            {paper &&
-              <Link href={`/rooms/${paper.id}/edit`} color="inherit">
-                <ArrowRight className={classes.rightIcon} />「{paper.name}」を編集する
+    if (error) {
+      return (
+        <NotFound />
+      )
+    } else {
+      return (
+        <Grid item s={12} md={10}>
+          <SiimpleBox className="siimple-box siimple--bg-dark" >
+            <div className={classes.titleContainer}>
+              <Typography variant="h1" className={classes.title}>
+                {paper?.name}
+              </Typography>
+              <Link href={`/rooms/${paper?.id}/edit`} color="inherit">
+                <ArrowRight className={classes.rightIcon} />メンバーを追加
               </Link>
-            }
-            <AddBillDialog />
-          </div>
-          <div className="siimple-rule"></div>
-          <ul>
-            {this.getUserPaymentTexts().map((text, i) => {
-              return (
-                <li key={i} className={classes.whiteText}>
-                  {text}
-                </li>
-              )
-            })}
-          </ul>
-          <div className={classes.dataGrid}>
-            <DataGrid
-              rows={this.rows()}
-              columns={this.columns()}
-              autoPageSize
-              autoHeight
-              rowHeight={30}
-            />
-          </div>
-        </SiimpleBox>
-      </Grid>
-    );
+              <AddBillDialog />
+            </div>
+            <div className="siimple-rule"></div>
+            <ul>
+              {this.getUserPaymentTexts().map((text, i) => {
+                return (
+                  <li key={i} className={classes.whiteText}>
+                    {text}
+                  </li>
+                )
+              })}
+            </ul>
+            <div className={classes.dataGrid}>
+              <DataGrid
+                rows={this.rows()}
+                columns={this.columns()}
+                autoPageSize
+                autoHeight
+                rowHeight={30}
+              />
+            </div>
+          </SiimpleBox>
+        </Grid>
+      );
+    }
   }
 }
 

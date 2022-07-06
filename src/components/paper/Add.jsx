@@ -5,21 +5,12 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 
 import {
-  IndeterminateCheckBoxOutlined as MinusIcon,
-  ArrowRight
-} from '@material-ui/icons';
-import {
   Grid,
-  FormGroup,
-  InputLabel,
   Button,
   TextField,
-  Link,
-  IconButton
+  Typography
 } from '@material-ui/core';
 import { withStyles } from "@material-ui/core/styles";
-
-import AddUserDialog from './AddUserDialog';
 
 import * as PaperAction from '../../actions/Paper';
 
@@ -35,6 +26,13 @@ const styles = theme => ({
   titleContainer: {
     display: 'flex',
     color: '#fafafa'
+  },
+  title: {
+    color: '#fafafa',
+    fontSize: 24,
+    marginTop: 6,
+    marginBottom: 6,
+    lineHeight: '40px'
   },
   inputLabel: {
     fontSize: 15,
@@ -59,17 +57,13 @@ const styles = theme => ({
   }
 })
 
-class PaperEdit extends React.Component {
+class PaperAdd extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isSetDefaltValue: false,
       inputName: ''
     }
-  }
-
-  componentDidMount = () => {
-    this.props.dispatch(PaperAction.getPaper(this.props.match.params.id))
   }
 
   componentDidUpdate = () => {
@@ -89,80 +83,41 @@ class PaperEdit extends React.Component {
     })
   }
 
-  handleClickRemoveUser = (userId) => {
-    this.props.dispatch(PaperAction.deleteMember(userId))
-  }
-
-  userList = () => {
-    const { classes, paper } = this.props
-    if (!paper.paper) return
-
-    return paper.paper.members.map((user, i) => {
-              return (
-                <div key={i} className={classes.flex}>
-                  <IconButton className={classes.btn} color="secondary" edge="end" aria-label="edit" onClick={() => this.handleClickRemoveUser(user.id)}>
-                    <MinusIcon />
-                  </IconButton>
-                  <p className={classes.listElement}>{user.name}</p>
-                </div>
-              )
-            })
-  }
-
-  handleSave = e => {
+  handleSave = (e) => {
     e.preventDefault();
-    const paper = this.props.paper.paper
 
     const data = {
-      id: paper.id,
-      name: this.state.inputName,
-      user_ids: paper.users.map(u => u.id)
+      name: this.state.inputName
     }
-    this.props.dispatch(PaperAction.editPaper(data))
+    this.props.dispatch(PaperAction.createPaper(data))
   }
 
   render() {
     const { classes } = this.props
-    const paper = this.props.paper.paper
 
     return (
       <Grid item s={12} md={7} className={classes.container}>
         <SiimpleBox className="siimple-box siimple--bg-dark" >
-          <div className={classes.titleContainer}>
-            <Link href={`/rooms/${paper?.id}`} color="inherit">
-              <ArrowRight className={classes.rightIcon} />立替一覧に戻る
-            </Link>
-          </div>
+          <Typography variant="h1" className={classes.title}>
+            部屋を作成して、<br />割り勘をはじめる。
+          </Typography>
           <div className="siimple-rule"></div>
           <form className={classes.form} onSubmit={this.handleSave}>
             <TextField
               autoFocus
               required
               id="name"
-              name="name"
               label="部屋名"
               placeholder='例）伊豆旅行 2022/10/10~13'
+              name="name"
               value={this.state.inputName}
               onChange={this.handleChangeName}
               fullWidth
               className={classes.field}
             />
             <Button type="submit" variant="outlined" color="primary" fullWidth>
-              保存
+              作成
             </Button>
-            <FormGroup className={classes.field}>
-              <div className={classes.flex}>
-                <InputLabel
-                  id="demo-simple-select-disabled-label"
-                  required
-                  className={classes.inputLabel}
-                >
-                  メンバー
-                </InputLabel>
-                <AddUserDialog />
-              </div>
-              {this.userList()}
-            </FormGroup>
           </form>
         </SiimpleBox>
       </Grid>
@@ -184,4 +139,4 @@ export default compose(
       bill: state.bill,
     }
   )
-))(withRouter(PaperEdit))
+))(withRouter(PaperAdd))

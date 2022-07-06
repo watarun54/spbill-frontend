@@ -58,8 +58,6 @@ export const getPaper = (id) => {
       console.log(res.data);
       if (res.data) {
         dispatch(receivePaper(null, res.data));
-      } else {
-        dispatch(receiveTokenExpired(user));
       }
     }).catch(err =>
       dispatch(receiveData(err))
@@ -91,6 +89,57 @@ export function addUser(userId) {
     }).catch(err =>
       dispatch(receiveData(err))
     )
+
+    dispatch(finishRequest(paper));
+  };
+}
+
+export function addMember(name) {
+  return (dispatch, getState) => {
+    const user = getState().user;
+    const paper = getState().paper;
+    let token = user.token;
+
+    dispatch(startRequest(paper));
+
+    axios.post(`${apiURL}/api/rooms/${paper.paper.id}/members`,
+      { name }, { headers: { Authorization: `Bearer ${token}` }
+      }).then((res) => {
+        if (res.data) {
+          dispatch(receivePaper(null, res.data));
+        } else {
+          dispatch(receiveTokenExpired(user));
+        }
+      }).catch(err => {
+        // TODO: エラーハンドリング(data.messageが存在する場合としない場合)
+        alert(err.response.data.message)
+        dispatch(receiveData(err))
+      })
+
+    dispatch(finishRequest(paper));
+  };
+}
+
+export function deleteMember(id) {
+  return (dispatch, getState) => {
+    const user = getState().user;
+    const paper = getState().paper;
+    let token = user.token;
+
+    dispatch(startRequest(paper));
+
+    axios.delete(`${apiURL}/api/rooms/${paper.paper.id}/members/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then((res) => {
+        if (res.data) {
+          dispatch(receivePaper(null, res.data));
+        } else {
+          dispatch(receiveTokenExpired(user));
+        }
+      }).catch(err => {
+        alert(err.response.data.message)
+        dispatch(receiveData(err))
+      })
 
     dispatch(finishRequest(paper));
   };
@@ -164,8 +213,7 @@ export const createPaper = (data) => {
           paper.paperList.unshift(res.data);
           dispatch(receiveData(null, paper.paperList));
           dispatch(receivePaper(null, res.data));
-        } else {
-          dispatch(receiveTokenExpired(user));
+          window.location.href = `/rooms/${res.data.id}`
         }
       }).catch(err => {
         dispatch(receiveData(err))
@@ -215,14 +263,9 @@ export const deletePaper = (id) => {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((res) => {
-        console.log(res.data);
-        if (res.data) {
-          const paperIdx = paper.paperList.findIndex(v => v.id === id)
-          paper.paperList.splice(paperIdx, 1)
-          dispatch(receiveData(null, paper.paperList));
-        } else {
-          dispatch(receiveTokenExpired(user));
-        }
+        const paperIdx = paper.paperList.findIndex(v => v.id === id)
+        paper.paperList.splice(paperIdx, 1)
+        dispatch(receiveData(null, paper.paperList));
       })
       .catch((err) => {
         dispatch(receiveData(err));

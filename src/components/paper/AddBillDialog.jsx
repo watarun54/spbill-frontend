@@ -10,7 +10,6 @@ import {
   withStyles,
   TextField,
   Button,
-  IconButton,
   Dialog,
   DialogActions,
   DialogContent,
@@ -37,11 +36,9 @@ const styles = theme => ({
     height: 30
   },
   addBtn: {
-    color: '#fafafa',
-    padding: 0,
-    position: 'relative',
-    top: 4,
-    right: 10
+    color: '#ad002d',
+    paddingLeft: 12,
+    paddingRight: 12,
   },
 })
 
@@ -50,9 +47,9 @@ class AddBillDialog extends React.Component {
     super(props);
     this.state = {
       open: false,
-      inputName: '',
-      inputAmount: 0,
-      inputPayerId: 0,
+      inputName: null,
+      inputAmount: null,
+      inputPayerId: null,
       inputPayeeIds: []
     }
   }
@@ -61,19 +58,22 @@ class AddBillDialog extends React.Component {
     e.preventDefault();
     const { paper } = this.props;
 
+    if (this.state.inputPayeeIds.length === 0) {
+      return alert('支払ってもらった人を選択してください')
+    }
+
     const data = {
       name: this.state.inputName,
       amount: this.state.inputAmount,
-      room_id: paper.paper.id,
       payer_id: this.state.inputPayerId,
       payee_ids: this.state.inputPayeeIds
     }
     this.props.dispatch(BillAction.createBill(data))
     this.setState({
       open: false,
-      inputName: 'タクシー代',
-      inputAmount: 1000,
-      inputPayerId: 0,
+      inputName: null,
+      inputAmount: null,
+      inputPayerId: null,
       inputPayeeIds: []
     });
   }
@@ -124,7 +124,7 @@ class AddBillDialog extends React.Component {
     const { paper } = this.props;
     if (!paper.paper) return
 
-    return paper.paper.users.map((payer, i) => {
+    return paper.paper.members.map((payer, i) => {
       return <MenuItem key={i} value={payer.id}>{payer.name}</MenuItem>
     })
   }
@@ -133,7 +133,7 @@ class AddBillDialog extends React.Component {
     const { classes, paper } = this.props;
     if (!paper.paper) return
 
-    return paper.paper.users
+    return paper.paper.members
       .filter(u => u.id !== this.state.inputPayerId)
       .map((payee, i) => {
         const checked = this.state.inputPayeeIds.includes(payee.id)
@@ -153,9 +153,9 @@ class AddBillDialog extends React.Component {
 
     return (
       <div className={classes.container}>
-        <IconButton className={classes.addBtn} edge="end" aria-label="edit" onClick={() => this.handleClickOpen()}>
-          <AddIcon />
-        </IconButton>
+        <Button className={classes.addBtn} variant="contained" startIcon={<AddIcon />} onClick={() => this.handleClickOpen()}>
+          立替を追加
+        </Button>
         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
           <form className="siimple-form" onSubmit={this.handleSave}>
             <DialogContent>
@@ -214,7 +214,7 @@ class AddBillDialog extends React.Component {
                 キャンセル
             </Button>
               <Button type="submit" color="primary">
-                保存
+                追加
             </Button>
             </DialogActions>
           </form>

@@ -31,9 +31,11 @@ import { resetDataBills } from "../actions/Bill"
 
 import PaperIndex from './paper/Index';
 import PaperShow from './paper/Show';
+import PaperAdd from './paper/Add';
 import PaperEdit from './paper/Edit';
 import SginIn from './SignIn';
 import SignUp from './SignUp';
+import NotFound from "./NotFound";
 import UserEdit from './user/Edit';
 import Auth from "./Auth.jsx";
 import ScrollToTop from "./ScrollToTop.jsx";
@@ -169,7 +171,7 @@ class Container extends React.Component {
           })}
         >
           <Toolbar>
-            <IconButton
+            {/* <IconButton
               color="inherit"
               aria-label="open drawer"
               onClick={this.handleDrawerOpen}
@@ -177,9 +179,9 @@ class Container extends React.Component {
               className={clsx(classes.menuButton, this.state.open && classes.hide)}
             >
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
             <Typography variant="h5" noWrap className={classes.title} onClick={this.handleClickHome}>
-              Spbill
+              SpBill.
             </Typography>
             {this.props.user.name.length > 0 &&
               <Typography>{this.props.user.name} さん</Typography>
@@ -236,7 +238,7 @@ class Container extends React.Component {
         >
         <div className={classes.drawerHeader} />
           <Switch>
-            <Route path='/login'><SginIn /></Route>
+            {/* <Route path='/login'><SginIn /></Route>
             <Route path='/signup'><SignUp /></Route>
             <Auth>
               <Switch>
@@ -245,7 +247,12 @@ class Container extends React.Component {
                 <Route exact path='/rooms/:id/edit' ><PaperEdit {...this.props} /></Route>
                 <Route path='/setting'><UserEdit /></Route>
               </Switch>
-            </Auth>
+            </Auth> */}
+
+            <Route exact path='/'><PaperAdd {...this.props} /></Route>
+            <Route exact path='/rooms/:id' ><PaperShow {...this.props} /></Route>
+            <Route exact path='/rooms/:id/edit' ><PaperEdit {...this.props} /></Route>
+            <Route><NotFound /></Route>
           </Switch>
         </div>
         </BrowserRouter>
